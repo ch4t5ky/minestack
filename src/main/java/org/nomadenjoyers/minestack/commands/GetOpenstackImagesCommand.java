@@ -12,11 +12,10 @@ public class GetOpenstackImagesCommand {
     public GetOpenstackImagesCommand(CommandDispatcher<CommandSource> dispatcher) {
         dispatcher.register(
                 Commands.literal("minestack")
-                        .then(Commands.literal("get")
-                                .then(Commands.literal("images"))
+                        .then(Commands.literal("get"))
                                 .executes((command) -> {
             return getAvailableImages(command.getSource());
-        })));
+        }));
     }
 
     private int getAvailableImages(CommandSource source) throws CommandSyntaxException {
