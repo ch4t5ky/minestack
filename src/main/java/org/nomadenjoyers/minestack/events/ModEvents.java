@@ -3,8 +3,6 @@ package org.nomadenjoyers.minestack.events;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -13,18 +11,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
 import org.nomadenjoyers.minestack.MineStack;
-import org.nomadenjoyers.minestack.commands.AddKeystoneKeyCommand;
-import org.nomadenjoyers.minestack.commands.CreateVMCommand;
-import org.nomadenjoyers.minestack.commands.GetOpenstackImagesCommand;
+import org.nomadenjoyers.minestack.commands.OpenstackCommands;
 
 @Mod.EventBusSubscriber(modid = MineStack.MOD_ID)
 public class ModEvents {
 
     @SubscribeEvent
     public static void onCommandsRegister(RegisterCommandsEvent event) {
-        new AddKeystoneKeyCommand(event.getDispatcher());
-        new GetOpenstackImagesCommand(event.getDispatcher());
-        new CreateVMCommand(event.getDispatcher());
+        new OpenstackCommands(event.getDispatcher());
 
         ConfigCommand.register(event.getDispatcher());
     }
