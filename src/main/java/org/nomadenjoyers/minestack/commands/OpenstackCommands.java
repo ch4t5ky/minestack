@@ -20,6 +20,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.nomadenjoyers.minestack.MineStack;
 import org.nomadenjoyers.minestack.openstack.Keystone;
+import org.nomadenjoyers.minestack.openstack.Nova;
 
 import java.util.UUID;
 
@@ -58,7 +59,11 @@ public class OpenstackCommands {
     private int createVM(CommandSource source) throws CommandSyntaxException {
         ServerPlayerEntity player = source.getPlayerOrException();
 
+
         String key =  UUID.randomUUID().toString();
+        String token = player.getPersistentData().get(MineStack.MOD_ID + "_keystone_key").toString() ;
+
+        String vmID = Nova.createVm(token, "minestack-pig-"+key);
 
         CompoundNBT compoundTag = new CompoundNBT();
         compoundTag.putString("id", "minecraft:pig");
@@ -70,7 +75,8 @@ public class OpenstackCommands {
             return e;
         });
 
-        entity.setCustomName(new StringTextComponent("minestack-vm"+key));
+        entity.setCustomName(new StringTextComponent("minestack-pig-"+key));
+        entity.getPersistentData().putString(MineStack.MOD_ID+"_vm", vmID);
 
         source.getLevel().addFreshEntity(entity);
         return 1;

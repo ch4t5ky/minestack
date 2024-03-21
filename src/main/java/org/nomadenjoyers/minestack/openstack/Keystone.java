@@ -11,7 +11,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 public class Keystone {
 
-    public static String BASE_URL = "http://...:5000/v3";
+    public static String BASE_URL = "http://localhost:5000/v3";
 
     public static String getToken(String username, String password)  {
         String url = BASE_URL + "/auth/tokens";
@@ -22,7 +22,7 @@ public class Keystone {
             return "";
         }
 
-        if (response.getStatusLine().getStatusCode() != 200) {
+        if (response.getStatusLine().getStatusCode() != 201) {
             return "";
         }
         return response.getFirstHeader("X-Subject-Token").getValue();
@@ -68,10 +68,16 @@ public class Keystone {
 
         authData.add("identity", identity);
 
+
+        JsonObject scope = new JsonObject();
+        JsonObject project = new JsonObject();
+        project.addProperty("name", "admin");
+        project.add("domain", domain);
+        scope.add("project", project);
+        authData.add("scope", scope);
+
         JsonObject payload = new JsonObject();
         payload.add("auth", authData);
-
-        System.out.println(new Gson().toJson(payload));
         return new Gson().toJson(payload);
     }
 }

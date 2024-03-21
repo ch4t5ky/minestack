@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
 import org.nomadenjoyers.minestack.MineStack;
 import org.nomadenjoyers.minestack.commands.OpenstackCommands;
+import org.nomadenjoyers.minestack.openstack.Nova;
 
 @Mod.EventBusSubscriber(modid = MineStack.MOD_ID)
 public class ModEvents {
@@ -30,7 +31,16 @@ public class ModEvents {
         boolean isKilledByPlayer = (killer.getType() == EntityType.PLAYER);
         if ((killedEntity.getType() == EntityType.PIG) && (isKilledByPlayer)) {
            String key = killer.getPersistentData().get(MineStack.MOD_ID + "_keystone_key").toString() ;
+           String vmID = killedEntity.getPersistentData().getString(MineStack.MOD_ID+"_vm").toString();
            Minecraft.getInstance().player.sendMessage(new StringTextComponent(killedEntity.getName().getString() + " killed  by player with" + key), Util.NIL_UUID);
+           Minecraft.getInstance().player.sendMessage(new StringTextComponent("Virtual Machine with UUID " + vmID + " will be destroyed."), Util.NIL_UUID);
+
+           Integer status = Nova.destroyVM(key, vmID);
+           if (status == 1) {
+               Minecraft.getInstance().player.sendMessage(new StringTextComponent("Virtual Machine with UUID " + vmID + " destroyed."), Util.NIL_UUID);
+           } else  {
+               Minecraft.getInstance().player.sendMessage(new StringTextComponent("Virtual Machine with UUID " + vmID + " failed to destroy."), Util.NIL_UUID);
+           }
        }
     }
 }
